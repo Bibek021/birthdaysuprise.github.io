@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Sis!</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            background: #ff6f61;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+        .gift-box::before {
+            content: '🎁';
+            font-size: 80px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: pop 0.5s ease-out;
+            z-index: 10;
+        }
+        @keyframes pop {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        .popup h1 {
+            color: #e91e63;
+            font-size: 2em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .cake-container {
+            display: none;
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 5;
+        }
+        .cake-layer {
+            width: 0;
+            height: 60px;
+            background: #ffeb3b;
+            border: 2px solid #d81b60;
+            margin: 5px auto;
+            opacity: 0;
+            transition: width 1s ease, opacity 1s ease;
+        }
+        .layer-1 { width: 300px; }
+        .layer-2 { width: 200px; }
+        .layer-3 { width: 100px; }
+        .candles {
+            display: none;
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+        }
+        .candle {
+            display: inline-block;
+            animation: flicker 0.2s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .hearts, .flowers, .balloons, .ribbons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .heart, .flower, .balloon, .ribbon {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="gift-box" onclick="openGift()"></div>
+    <div class="cake-container" id="cake">
+        <div class="cake-layer" id="layer3"></div>
+        <div class="cake-layer" id="layer2"></div>
+        <div class="cake-layer" id="layer1"></div>
+        <div class="candles" id="candles">🕯️🕯️🕯️</div>
+    </div>
+    <div class="popup" id="popup">
+        <h1>Happy Birthday, Didi! 🎉</h1>
+        <p>You’re the best didi i could ask for! 💖</p>
+    </div>
+    <div class="hearts" id="hearts"></div>
+    <div class="flowers" id="flowers"></div>
+    <div class="balloons" id="balloons"></div>
+    <div class="ribbons" id="ribbons"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script>
+        function openGift() {
+            const giftBox = document.querySelector('.gift-box');
+            const cake = document.getElementById('cake');
+            const layer1 = document.getElementById('layer1');
+            const layer2 = document.getElementById('layer2');
+            const layer3 = document.getElementById('layer3');
+            const candles = document.getElementById('candles');
+            const popup = document.getElementById('popup');
+            const hearts = document.getElementById('hearts');
+            const flowers = document.getElementById('flowers');
+            const balloons = document.getElementById('balloons');
+            const ribbons = document.getElementById('ribbons');
+
+            // Hide gift box
+            giftBox.style.display = 'none';
+
+            // Show cake and animate layers
+            cake.style.display = 'block';
+            setTimeout(() => {
+                layer1.style.width = '300px';
+                layer1.style.opacity = '1';
+            }, 500);
+            setTimeout(() => {
+                layer2.style.width = '200px';
+                layer2.style.opacity = '1';
+            }, 1500);
+            setTimeout(() => {
+                layer3.style.width = '100px';
+                layer3.style.opacity = '1';
+            }, 2500);
+
+            // Show candles
+            setTimeout(() => {
+                candles.style.display = 'block';
+            }, 3500);
+
+            // Stop candles and show birthday message
+            setTimeout(() => {
+                candles.style.display = 'none';
+                popup.style.display = 'block';
+
+                // Trigger confetti
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff6f61', '#e91e63', '#ffd700']
+                });
+
+                // Add hearts
+                for (let i = 0; i < 10; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '💖';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    hearts.appendChild(heart);
+                }
+
+                // Add flowers
+                for (let i = 0; i < 10; i++) {
+                    const flower = document.createElement('div');
+                    flower.className = 'flower';
+                    flower.innerHTML = '🌸';
+                    flower.style.left = Math.random() * 100 + 'vw';
+                    flower.style.animationDelay = Math.random() * 2 + 's';
+                    flowers.appendChild(flower);
+                }
+
+                // Add balloons
+                for (let i = 0; i < 10; i++) {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'balloon';
+                    balloon.innerHTML = '🎈';
+                    balloon.style.left = Math.random() * 100 + 'vw';
+                    balloon.style.animationDelay = Math.random() * 2 + 's';
+                    balloons.appendChild(balloon);
+                }
+
+                // Add ribbons
+                for (let i = 0; i < 10; i++) {
+                    const ribbon = document.createElement('div');
+                    ribbon.className = 'ribbon';
+                    ribbon.innerHTML = '🎀';
+                    ribbon.style.left = Math.random() * 100 + 'vw';
+                    ribbon.style.animationDelay = Math.random() * 2 + 's';
+                    ribbons.appendChild(ribbon);
+                }
+            }, 6500);
+        }
+    </script>
+</body>
+</html>
